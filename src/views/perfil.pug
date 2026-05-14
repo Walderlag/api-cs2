@@ -1,0 +1,42 @@
+doctype html
+html(lang="pt-br")
+  head
+    title Meu Inventário CS2
+    meta(charset="UTF-8")
+    style.
+      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 24px; background: #0d1117; color: #c9d1d9; }
+      .header { border-bottom: 1px solid #30363d; padding-bottom: 20px; margin-bottom: 20px; }
+      h1 { margin: 0; color: #58a6ff; }
+      p.subtitle { color: #8b949e; margin-top: 5px; }
+      .stats-container { display: flex; gap: 20px; margin-bottom: 30px; }
+      .stat-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; flex: 1; text-align: center; }
+      .stat-value { font-size: 2rem; font-weight: bold; color: #fff; }
+      .stat-label { font-size: 0.9rem; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+      .inventory-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
+      ul { list-style-type: none; padding: 0; }
+      li { padding: 10px; border-bottom: 1px solid #30363d; }
+      li:last-child { border-bottom: none; }
+  body
+    div.header
+      h1 Olá, #{jogador.nome}
+      p.subtitle Patente: #{jogador.patente} | Saldo: $#{jogador.saldo}
+    
+    div.stats-container
+      div.stat-box
+        div.stat-value #{estatisticas.caixas}
+        div.stat-label Caixas Fechadas
+      div.stat-box
+        div.stat-value #{estatisticas.chaves}
+        div.stat-label Chaves
+      div.stat-box
+        div.stat-value #{estatisticas.skins}
+        div.stat-label Armas no Arsenal
+
+    div.inventory-section
+      h2 Arsenal de Skins
+      if inventarioSkins.length > 0
+        ul
+          each skin in inventarioSkins
+            li 🔫 #{skin.arma} | #{skin.nome_skin} (#{skin.raridade})
+      else
+        p Seu arsenal está vazio. Abra algumas caixas!
