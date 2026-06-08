@@ -2,18 +2,20 @@ import * as inventoryService from '../services/inventoryService.js';
 
 export const renderizarPerfil = async (req, res, next) => {
   try {
-    const totalCaixas = inventoryService.countCaixas();
-    const totalSkins = inventoryService.countSkins();
-    const totalChaves = inventoryService.countChaves();
+    const totalCaixas = await inventoryService.countCaixas();
+    const totalSkins = await inventoryService.countSkins();
+    const totalChaves = await inventoryService.countChaves();
+    const perfil = await inventoryService.getPerfil();
+    const skins = await inventoryService.getSkins();
 
     res.render('perfil', {
-      jogador: inventoryService.getPerfil() ?? {},
+      jogador: perfil ?? {},
       estatisticas: {
         caixas: totalCaixas,
         skins: totalSkins,
         chaves: totalChaves
       },
-      inventarioSkins: inventoryService.getSkins() ?? []
+      inventarioSkins: skins ?? []
     });
   } catch (error) {
     next(error);

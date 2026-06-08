@@ -1,36 +1,52 @@
-//skins.pug
 doctype html
 html(lang="pt-br")
   head
-    title Coleção Sonhos e Pesadelos
+    title CS2 Inventory — Skins
     meta(charset="UTF-8")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap")
     style.
-      body { font-family: Arial, sans-serif; padding: 24px; background: #111; color: #f5f5f5; }
-      h1 { margin-bottom: 20px; }
-      table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-      th, td { border: 1px solid #333; padding: 12px; }
-      th { background: #222; text-transform: uppercase; font-size: 0.85rem; }
-      tr:nth-child(even) { background: #1a1a1a; }
-      .raridade-secreto { background: #8b0000; color: #fff; }
-      .raridade-oculto { background: #9932cc; color: #fff; }
-      .raridade-classificado { background: #ff69b4; color: #111; }
-      .raridade-restrito { background: #1e90ff; color: #fff; }
-      .raridade-militar { background: #228b22; color: #fff; }
-      .badge { border-radius: 6px; padding: 4px 10px; display: inline-block; }
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Rajdhani',sans-serif;background:#0d0d14;color:#c0c4d8;min-height:100vh}
+      nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:#07070d;border-bottom:1px solid #1e2030}
+      .logo{font-size:12px;color:#e8b84b;letter-spacing:3px;text-transform:uppercase;font-weight:700}
+      .nav-links a{padding:8px 18px;border:1px solid #2a2d45;color:#7b8099;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:4px;margin-left:4px;transition:all .15s}
+      .nav-links a:hover{border-color:#e8b84b;color:#e8b84b}
+      .nav-links a.active{background:#e8b84b;border-color:#e8b84b;color:#0a0a0f}
+      main{padding:28px 24px;max-width:900px}
+      .section-label{font-size:11px;color:#5a5f7a;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+      .section-label::after{content:'';flex:1;height:1px;background:#1e2030}
+      table{width:100%;border-collapse:collapse}
+      thead th{font-size:11px;color:#5a5f7a;letter-spacing:2px;text-transform:uppercase;text-align:left;padding:8px 12px;border-bottom:1px solid #1e2030}
+      tbody td{padding:12px;border-bottom:1px solid #12141f;font-size:15px;color:#c0c4d8}
+      tbody tr:hover td{background:#11131f}
+      .arma-col{color:#f0f0f8;font-weight:700}
+      .r-badge{font-size:11px;padding:3px 8px;border-radius:3px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+      .secreto{background:#3d0a0a;color:#ff5252;border:1px solid #8b0000}
+      .oculto{background:#1e0a3d;color:#b84fff;border:1px solid #6a0dad}
+      .restrito{background:#0a1a3d;color:#5294ff;border:1px solid #1e4dbf}
+      .militar{background:#0a2a10;color:#52c47a;border:1px solid #1a6e35}
   body
-    h1 Coleção Sonhos e Pesadelos
-    table
-      thead
-        tr
-          th Arma
-          th Skin
-          th Raridade
-          th Caixa ID
-      tbody
-        each skin in skins
-          - const badgeClass = 'raridade-' + skin.raridade.toLowerCase().replace(/\s+/g, '-');
+    nav
+      span.logo CS2 Inventory
+      div.nav-links
+        a(href="/perfil") Perfil
+        a(href="/caixas/view") Caixas
+        a(href="/skins/view" class="active") Skins
+    main
+      div.section-label Coleção sonhos e pesadelos
+      table
+        thead
           tr
-            td= skin.arma
-            td= skin.nome_skin
-            td(class=badgeClass)= skin.raridade
-            td= skin.caixa_id
+            th Arma
+            th Skin
+            th Raridade
+            th Caixa ID
+        tbody
+          each skin in skins
+            - const rc = skin.raridade ? skin.raridade.toLowerCase().replace(/\s+/g, '-') : ''
+            tr
+              td.arma-col= skin.arma
+              td= skin.nome_skin
+              td
+                span(class=`r-badge ${rc}`)= skin.raridade
+              td(style="font-size:12px;color:#5a5f7a;font-family:monospace")= skin.caixa_id

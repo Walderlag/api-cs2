@@ -18,7 +18,7 @@ export const regrasValidacaoSkin = [
 
   body('caixa_id')
     .notEmpty().withMessage('O ID da caixa é obrigatório')
-    .isInt({ min: 1 }).withMessage('O ID da caixa deve ser um número inteiro válido'),
+    .isMongoId().withMessage('O ID da caixa deve ser um ObjectId válido'),
 
   verificarErros
 ];
