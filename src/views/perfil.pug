@@ -19,7 +19,7 @@ html(lang="pt-br")
       .badge{display:inline-block;margin-top:4px;padding:3px 10px;background:#1a1d2e;border:1px solid #e8b84b;border-radius:3px;font-size:12px;color:#e8b84b;letter-spacing:2px;text-transform:uppercase}
       .saldo{margin-top:6px;font-size:13px;color:#5a5f7a}
       .saldo span{color:#e8b84b;font-weight:700}
-      .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+      .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
       .stat-card{background:#11131f;border:1px solid #1e2030;border-radius:8px;padding:18px;text-align:center}
       .stat-card .val{font-size:36px;font-weight:700;color:#e8b84b}
       .stat-card .lbl{font-size:11px;color:#5a5f7a;letter-spacing:2px;text-transform:uppercase;margin-top:4px}
@@ -28,11 +28,14 @@ html(lang="pt-br")
       .skin-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#11131f;border:1px solid #1e2030;border-radius:6px;margin-bottom:6px}
       .skin-item .arma{font-size:14px;color:#f0f0f8;font-weight:600}
       .skin-item .nome{font-size:13px;color:#7b8099}
+      .skin-item .data{font-size:11px;color:#5a5f7a;margin-top:2px}
       .r-badge{font-size:11px;padding:3px 8px;border-radius:3px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-      .secreto{background:#3d0a0a;color:#ff5252;border:1px solid #8b0000}
-      .oculto{background:#1e0a3d;color:#b84fff;border:1px solid #6a0dad}
-      .restrito{background:#0a1a3d;color:#5294ff;border:1px solid #1e4dbf}
-      .militar{background:#0a2a10;color:#52c47a;border:1px solid #1a6e35}
+      .covert{background:#3d0a0a;color:#ff5252;border:1px solid #8b0000}
+      .classified{background:#1e0a3d;color:#b84fff;border:1px solid #6a0dad}
+      .restricted{background:#0a1a3d;color:#5294ff;border:1px solid #1e4dbf}
+      .mil-spec{background:#0a2a10;color:#52c47a;border:1px solid #1a6e35}
+      .rare-special{background:#3d2a00;color:#ffcc00;border:1px solid #a07800}
+      .empty{color:#5a5f7a;font-size:14px;padding:20px 0}
   body
     nav
       span.logo CS2 Inventory
@@ -47,7 +50,7 @@ html(lang="pt-br")
           h1= jogador.nome
           span.badge= jogador.patente
           p.saldo Saldo:
-            span $#{jogador.saldo}
+            span  $#{jogador.saldo}
       div.stats-grid
         div.stat-card
           div.val= estatisticas.caixas
@@ -57,12 +60,18 @@ html(lang="pt-br")
           div.lbl Chaves
         div.stat-card
           div.val= estatisticas.skins
-          div.lbl Skins
-      div.section-label Arsenal de skins
+          div.lbl Skins no BD
+        div.stat-card
+          div.val= inventarioSkins.length
+          div.lbl No inventário
+      div.section-label Inventário do jogador
+      if inventarioSkins.length === 0
+        p.empty Nenhuma skin ainda. Abra caixas via POST /caixas/:id/abrir
       each skin in inventarioSkins
         - const rc = skin.raridade ? skin.raridade.toLowerCase().replace(/\s+/g,'-') : ''
         div.skin-item
           div
             div.arma= skin.arma
             div.nome= skin.nome_skin
+            div.data= skin.obtidoEm ? new Date(skin.obtidoEm).toLocaleString('pt-BR') : ''
           span(class=`r-badge ${rc}`)= skin.raridade
