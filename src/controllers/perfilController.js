@@ -6,7 +6,7 @@ export const renderizarPerfil = async (req, res, next) => {
     const totalSkins = await inventoryService.countSkins();
     const totalChaves = await inventoryService.countChaves();
     const perfil = await inventoryService.getPerfil();
-    const skins = await inventoryService.getSkins();
+    const inventario = await inventoryService.getInventario('Jogador_01');
 
     res.render('perfil', {
       jogador: perfil ?? {},
@@ -15,7 +15,7 @@ export const renderizarPerfil = async (req, res, next) => {
         skins: totalSkins,
         chaves: totalChaves
       },
-      inventarioSkins: skins ?? []
+      inventarioSkins: inventario ?? []
     });
   } catch (error) {
     next(error);
