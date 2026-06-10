@@ -11,7 +11,7 @@ async function startServer() {
     // Conectar ao MongoDB antes de iniciar o servidor
     await connectDB();
     
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Servidor de Inventário CS2 rodando em http://localhost:${PORT}`);
       console.log(`📚 Documentação API: http://localhost:${PORT}/api-docs`);
       console.log(`📦 Página de Caixas em http://localhost:${PORT}/caixas/view`);
