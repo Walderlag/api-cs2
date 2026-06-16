@@ -9,6 +9,8 @@ const router = Router();
  *   get:
  *     summary: Renderizar página do perfil (Pug)
  *     tags: [Perfil]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Página do perfil renderizada

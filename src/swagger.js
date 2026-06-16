@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 3000}`,
+        url: process.env.RENDER_EXTERNAL_URL || `https://api-cs2.onrender.com`,
         description: 'Servidor'
       }
     ],
@@ -38,6 +38,23 @@ const options = {
             colecao: {
               type: 'string',
               example: 'Recon'
+            }
+          }
+        },
+        Chave: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'ID único da chave (ObjectId do MongoDB)'
+            },
+            nome: {
+              type: 'string',
+              example: 'Chave de Caso'
+            },
+            quantidade: {
+              type: 'integer',
+              example: 10
             }
           }
         },

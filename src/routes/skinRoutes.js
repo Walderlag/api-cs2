@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   listarSkins,
+  listarMinhasSkins,
   buscarSkinPorId,
   criarSkin,
   atualizarSkinPut,
@@ -56,7 +57,7 @@ router.get('/', listarSkins);
  *       500:
  *         description: Erro interno no servidor
  */
-router.get('/minhas', authMiddleware, authorize('user', 'admin'), listarSkins);
+router.get('/minhas', authMiddleware, authorize('user', 'admin'), listarMinhasSkins);
 
 /**
  * @swagger

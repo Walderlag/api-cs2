@@ -184,6 +184,31 @@ async function seed() {
       console.log('⚠️  Chaves já existem');
     }
 
+    // Inventário do admin com algumas skins (para demonstração)
+    const adminUser = await db.collection('users').findOne({ role: 'admin' });
+    if (adminUser) {
+      const inventarioExistente = await db.collection('inventario').countDocuments({ userId: adminUser._id.toString() });
+
+      if (inventarioExistente === 0) {
+        const skins = await db.collection('skins').find({}).limit(3).toArray();
+
+        for (const skin of skins) {
+          await db.collection('inventario').insertOne({
+            userId: adminUser._id.toString(),
+            skinId: skin._id,
+            arma: skin.arma,
+            nome_skin: skin.nome_skin,
+            raridade: skin.raridade,
+            caixa_id: skin.caixa_id,
+            obtidoEm: new Date()
+          });
+        }
+        console.log('✅ Inventário do admin populado com 3 skins de exemplo');
+      } else {
+        console.log('⚠️  Inventário do admin já possui skins');
+      }
+    }
+
     console.log('\n🎉 Seed concluído! Rode: npm run dev');
     process.exit(0);
   } catch (error) {

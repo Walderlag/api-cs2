@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+const BASE_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
 
 async function startServer() {
   try {
@@ -12,12 +13,12 @@ async function startServer() {
     await connectDB();
     
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 Servidor de Inventário CS2 rodando em http://localhost:${PORT}`);
-      console.log(`📚 Documentação API: http://localhost:${PORT}/api-docs`);
-      console.log(`📦 Página de Caixas em http://localhost:${PORT}/caixas/view`);
-      console.log(`🎮 Página de Skins em http://localhost:${PORT}/skins/view`);
-      console.log(`👤 Perfil do Jogador em http://localhost:${PORT}/perfil`);
-      console.log(`🔑 Login em POST http://localhost:${PORT}/auth/login`);
+      console.log(`🚀 Servidor de Inventário CS2 rodando em ${BASE_URL}`);
+      console.log(`📚 Documentação API: ${BASE_URL}/api-docs`);
+      console.log(`📦 Página de Caixas em ${BASE_URL}/caixas/view`);
+      console.log(`🎮 Página de Skins em ${BASE_URL}/skins/view`);
+      console.log(`👤 Perfil do Jogador em ${BASE_URL}/perfil`);
+      console.log(`🔑 Login em POST ${BASE_URL}/auth/login`);
     });
   } catch (error) {
     console.error('❌ Erro ao iniciar o servidor:', error);

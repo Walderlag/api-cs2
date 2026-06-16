@@ -9,6 +9,59 @@ const router = Router();
 /**
  * @swagger
  * /users:
+ *   get:
+ *     summary: Listar todos os usuários (requer role admin)
+ *     tags: [Usuários]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de usuários (sem expor senhas)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   role:
+ *                     type: string
+ *                     enum: [admin, user]
+ *                   criadoEm:
+ *                     type: string
+ *                     format: date-time
+ *       401:
+ *         description: Token inválido ou não fornecido
+ *       403:
+ *         description: Acesso negado. Permissões insuficientes
+ *       500:
+ *         description: Erro interno no servidor
+ */
+router.get('/', authMiddleware, authorize('admin'), async (req, res, next) => {
+  try {
+    const db = getDb();
+    const usuarios = await db.collection('users').find({}).toArray();
+
+    const usuariosDTO = usuarios.map(u => ({
+      id: u._id.toString(),
+      email: u.email,
+      role: u.role,
+      criadoEm: u.criadoEm
+    }));
+
+    res.status(200).json(usuariosDTO);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /users:
  *   post:
  *     summary: Criar novo usuário (requer role admin)
  *     tags: [Usuários]

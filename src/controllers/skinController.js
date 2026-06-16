@@ -10,6 +10,16 @@ export const listarSkins = async (req, res, next) => {
   }
 };
 
+export const listarMinhasSkins = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const minhasSkins = await inventoryService.getInventario(userId);
+    res.status(200).json(minhasSkins ?? []);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const buscarSkinPorId = async (req, res, next) => {
   try {
     const { id } = req.params;

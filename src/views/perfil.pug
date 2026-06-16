@@ -51,6 +51,10 @@ html(lang="pt-br")
           span.badge= jogador.patente
           p.saldo Saldo:
             span  $#{jogador.saldo}
+          if jogador.usuarioLogado
+            p.saldo(style="margin-top:8px; font-size:11px; color:#5a5f7a")
+              | Logado como: #{jogador.usuarioLogado.email}
+              span.badge(style="background:#1a1d2e; margin-left:6px")= jogador.usuarioLogado.role
       div.stats-grid
         div.stat-card
           div.val= estatisticas.caixas
