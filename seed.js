@@ -147,12 +147,46 @@ async function seed() {
     }
 
     // Caixas e Skins
+    // Chaves primeiro (para usar os IDs nas caixas)
+    const totalChaves = await db.collection('chaves').countDocuments();
+    let chavesMap = {};
+    if (totalChaves === 0) {
+      const chavesParaCriar = [
+        { nome: 'Chave Kilowatt', quantidade: 10 },
+        { nome: 'Chave Revolution', quantidade: 10 },
+        { nome: 'Chave Dreams & Nightmares', quantidade: 10 },
+        { nome: 'Chave Gallery', quantidade: 10 },
+        { nome: 'Chave Fracture', quantidade: 10 },
+      ];
+      const chavesResult = await db.collection('chaves').insertMany(chavesParaCriar);
+      chavesMap = {
+        'Kilowatt': chavesResult.insertedIds[0],
+        'Revolution': chavesResult.insertedIds[1],
+        'Dreams & Nightmares': chavesResult.insertedIds[2],
+        'Gallery': chavesResult.insertedIds[3],
+        'Fracture': chavesResult.insertedIds[4],
+      };
+      console.log('✅ Chaves criadas (50 no total)');
+    } else {
+      console.log('⚠️  Chaves já existem');
+      // Se chaves já existem, buscar seus IDs
+      const chavesCriadas = await db.collection('chaves').find({}).toArray();
+      chavesCriadas.forEach(chave => {
+        if (chave.nome.includes('Kilowatt')) chavesMap['Kilowatt'] = chave._id;
+        if (chave.nome.includes('Revolution')) chavesMap['Revolution'] = chave._id;
+        if (chave.nome.includes('Dreams')) chavesMap['Dreams & Nightmares'] = chave._id;
+        if (chave.nome.includes('Gallery')) chavesMap['Gallery'] = chave._id;
+        if (chave.nome.includes('Fracture')) chavesMap['Fracture'] = chave._id;
+      });
+    }
+
     const totalCaixas = await db.collection('caixas').countDocuments();
     if (totalCaixas === 0) {
       for (const caixa of caixas) {
         const resultCaixa = await db.collection('caixas').insertOne({
           nome: caixa.nome,
-          colecao: caixa.colecao
+          colecao: caixa.colecao,
+          chave_id: chavesMap[caixa.colecao]
         });
 
         const skinsParaInserir = caixa.skins.map(s => ({
@@ -167,21 +201,6 @@ async function seed() {
       }
     } else {
       console.log('⚠️  Caixas já existem');
-    }
-
-    // Chaves
-    const totalChaves = await db.collection('chaves').countDocuments();
-    if (totalChaves === 0) {
-      await db.collection('chaves').insertMany([
-        { nome: 'Chave Kilowatt', quantidade: 10 },
-        { nome: 'Chave Revolution', quantidade: 10 },
-        { nome: 'Chave Dreams & Nightmares', quantidade: 10 },
-        { nome: 'Chave Gallery', quantidade: 10 },
-        { nome: 'Chave Fracture', quantidade: 10 },
-      ]);
-      console.log('✅ Chaves criadas (50 no total)');
-    } else {
-      console.log('⚠️  Chaves já existem');
     }
 
     // Inventário do admin com algumas skins (para demonstração)

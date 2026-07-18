@@ -77,5 +77,6 @@ html(lang="pt-br")
           div
             div.arma= skin.arma
             div.nome= skin.nome_skin
-            div.data= skin.obtidoEm ? new Date(skin.obtidoEm).toLocaleString('pt-BR') : ''
-          span(class=`r-badge ${rc}`)= skin.raridade
+          div(style="display: flex; gap: 10px; align-items: center;")
+            span(class=`r-badge ${rc}`)= skin.raridade
+            span(style="background: #1a1d2e; padding: 3px 8px; border-radius: 3px; border: 1px solid #e8b84b; color: #e8b84b; font-size: 12px; font-weight: 700;")= '×' + skin.quantidade

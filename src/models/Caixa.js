@@ -1,3 +1,3 @@
-export function CaixaModel({ nome, colecao }) {
-  return { nome, colecao };
+export function CaixaModel({ nome, colecao, chave_id }) {
+  return { nome, colecao, chave_id };
 }

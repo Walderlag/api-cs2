@@ -52,6 +52,11 @@ function sortearSkin(skins) {
 }
 
 export const abrirCaixa = async (caixaId, userId) => {
+  const caixa = await repo.getCaixaById(caixaId);
+  if (!caixa) {
+    throw new Error('Caixa não encontrada');
+  }
+
   const skins = await getSkins();
   const skinsDaCaixa = skins.filter(s => s.caixa_id?.toString() === caixaId);
 
@@ -59,10 +64,10 @@ export const abrirCaixa = async (caixaId, userId) => {
     throw new Error('Nenhuma skin encontrada nesta caixa');
   }
 
-  // Consome uma chave
-  const chaveConsumida = await repo.consumirChave();
+  // Consome uma chave específica da caixa
+  const chaveConsumida = await repo.consumirChave(caixa.chave_id);
   if (!chaveConsumida) {
-    throw new Error('Sem chaves disponíveis');
+    throw new Error('Sem chaves disponíveis para esta caixa');
   }
 
   // Sorteia com probabilidade

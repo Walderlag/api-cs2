@@ -34,7 +34,7 @@ app.use('/chaves', chaveRoutes);
 // Rota raiz (boas-vindas)
 app.get('/', (req, res) => {
   res.json({ 
-    mensagem: "✅ API CS2 Inventory está rodando com sucesso!",
+    mensagem: "API CS2 Inventory está rodando com sucesso!",
     documentacao: "/api-docs",
     paginas: ["/perfil", "/caixas/view", "/skins/view"]
   });

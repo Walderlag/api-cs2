@@ -24,11 +24,11 @@ export const getCaixaById = async (id) => {
   return await db.collection('caixas').findOne({ _id: new ObjectId(id) });
 };
 
-export const addCaixa = async ({ nome, colecao }) => {
+export const addCaixa = async ({ nome, colecao, chave_id }) => {
   const db = getDb();
-  const doc = CaixaModel({ nome, colecao });
+  const doc = CaixaModel({ nome, colecao, chave_id });
   const result = await db.collection('caixas').insertOne(doc);
-  return { _id: result.insertedId, nome, colecao };
+  return { _id: result.insertedId, nome, colecao, chave_id };
 };
 
 export const updateCaixa = async (id, payload) => {
@@ -108,9 +108,9 @@ export const getAllChaves = async () => {
   return await db.collection('chaves').find({}).toArray();
 };
 
-export const consumirChave = async () => {
+export const consumirChave = async (chaveId) => {
   const db = getDb();
-  const chave = await db.collection('chaves').findOne({ quantidade: { $gt: 0 } });
+  const chave = await db.collection('chaves').findOne({ _id: new ObjectId(chaveId), quantidade: { $gt: 0 } });
   if (!chave) return null;
   await db.collection('chaves').updateOne(
     { _id: chave._id },

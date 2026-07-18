@@ -15,10 +15,10 @@ export async function connectDB() {
   try {
     client = new MongoClient(MONGO_URI);
     await client.connect();
-    console.log('✅ Conectado ao MongoDB Atlas');
+    console.log('Conectado ao MongoDB Atlas');
     return client;
   } catch (error) {
-    console.error('❌ Erro ao conectar ao MongoDB:', error);
+    console.error('Erro ao conectar ao MongoDB:', error);
     process.exit(1);
   }
 }
