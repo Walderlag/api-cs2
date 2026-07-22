@@ -139,7 +139,12 @@ async function seed() {
     if (!adminExistente) {
       const senhaHash = await bcrypt.hash('admin123', 10);
       await db.collection('users').insertOne({
-        email: 'admin@cs2.com', senha: senhaHash, role: 'admin', criadoEm: new Date()
+        email: 'admin@cs2.com',
+        senha: senhaHash,
+        role: 'admin',
+        criadoEm: new Date(),
+        tentativasFalhas: 0,
+        bloqueadoAte: null
       });
       console.log('✅ Admin criado — admin@cs2.com / admin123');
     } else {

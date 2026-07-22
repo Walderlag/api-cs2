@@ -12,5 +12,9 @@ export const regrasValidacaoCaixa = [
     .notEmpty().withMessage('A coleção é obrigatória')
     .isLength({ min: 3 }).withMessage('A coleção deve ter ao menos 3 caracteres'),
 
+  body('chave_id')
+    .notEmpty().withMessage('O ID da chave é obrigatório')
+    .isMongoId().withMessage('O ID da chave deve ser um ObjectId válido'),
+
   verificarErros
 ];

@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: process.env.RENDER_EXTERNAL_URL || `https://api-cs2.onrender.com`,
+        url: process.env.RENDER_EXTERNAL_URL || 'https://api-cs2.onrender.com',
         description: 'Servidor'
       }
     ],

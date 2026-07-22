@@ -11,11 +11,15 @@ import skinRoutes from './routes/skinRoutes.js';
 import perfilRoutes from './routes/perfilRoutes.js';
 import chaveRoutes from './routes/chaveRoutes.js';
 
+
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.set('trust proxy', 1);
 app.use(express.json());
 
 app.set('view engine', 'pug');

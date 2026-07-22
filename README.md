@@ -1,4 +1,4 @@
-# 🎮 CS2 Inventory API
+﻿# 🎮 CS2 Inventory API
 
 API REST para gerenciamento de inventário de Counter-Strike 2 com autenticação JWT, controle de acesso por papéis (RBAC) e documentação automática via Swagger.
 
@@ -102,6 +102,8 @@ Content-Type: application/json
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+Se houver muitas tentativas de login inválidas, a conta do usuário pode ser temporariamente bloqueada e a API retornará status 403 até que o bloqueio expire.
+
 
 ### 2. Usar o token nas requisições protegidas
 
@@ -272,7 +274,9 @@ Authorization: Bearer <seu_token>
     "email": "string",
     "senha": "string (bcrypt)",
     "role": "string (admin|user)",
-    "criadoEm": "Date"
+    "criadoEm": "Date",
+    "tentativasFalhas": "number",
+    "bloqueadoAte": "Date | null"
   }
   ```
 

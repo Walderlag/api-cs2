@@ -129,7 +129,9 @@ router.post('/', authMiddleware, authorize('admin'), async (req, res, next) => {
       email,
       senha: senhaHash,
       role,
-      criadoEm: new Date()
+      criadoEm: new Date(),
+      tentativasFalhas: 0,
+      bloqueadoAte: null
     });
 
     res.status(201).json({

@@ -31,8 +31,8 @@ export const buscarCaixaPorId = async (req, res, next) => {
 
 export const criarCaixa = async (req, res, next) => {
   try {
-    const { nome, colecao } = req.body;
-    const novaCaixa = await inventoryService.addCaixa({ nome, colecao });
+    const { nome, colecao, chave_id } = req.body;
+    const novaCaixa = await inventoryService.addCaixa({ nome, colecao, chave_id });
     res.status(201).json(toCaixaDTO(novaCaixa));
   } catch (error) { next(error); }
 };
