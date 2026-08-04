@@ -133,6 +133,7 @@ async function seed() {
     console.log('🌱 Iniciando seed...');
     await connectDB();
     const db = getDb();
+    await db.collection('users').createIndex({ email: 1 }, { unique: true });
 
     // Admin
     const adminExistente = await db.collection('users').findOne({ role: 'admin' });

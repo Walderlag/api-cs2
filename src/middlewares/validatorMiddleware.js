@@ -4,8 +4,9 @@ export const verificarErros = (req, res, next) => {
     const erros = validationResult(req);
     if (!erros.isEmpty()) {
         return res.status(400).json({ 
-            sucesso: false, 
-            erros: erros.array() 
+            status: 400,
+            message: 'Erro de validação', 
+            errors: erros.array() 
         });
     }
     next();

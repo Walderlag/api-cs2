@@ -9,7 +9,7 @@ import {
   renderizarCaixas,
   abrirCaixa
 } from '../controllers/caixaController.js';
-import { regrasValidacaoCaixa } from '../validators/caixaValidator.js';
+import { regrasValidacaoCaixa, regrasValidacaoCaixaPatch } from '../validators/caixaValidator.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import { authorize } from '../middlewares/permissionMiddleware.js';
 
@@ -170,6 +170,7 @@ router.post('/', authMiddleware, authorize('admin'), regrasValidacaoCaixa, criar
  *         description: Erro interno no servidor
  */
 router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoCaixa, atualizarCaixaPut);
+router.patch('/:id', authMiddleware, authorize('admin'), regrasValidacaoCaixaPatch, atualizarCaixaPatch);
 
 /**
  * @swagger
@@ -212,8 +213,6 @@ router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoCaixa, atu
  *       500:
  *         description: Erro interno no servidor
  */
-router.patch('/:id', authMiddleware, authorize('admin'), atualizarCaixaPatch);
-
 /**
  * @swagger
  * /caixas/{id}:

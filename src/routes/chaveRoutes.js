@@ -7,7 +7,7 @@ import {
   atualizarChavePatch,
   deletarChave
 } from '../controllers/chaveController.js';
-import { regrasValidacaoChave } from '../validators/chaveValidator.js';
+import { regrasValidacaoChave, regrasValidacaoChavePatch } from '../validators/chaveValidator.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import { authorize } from '../middlewares/permissionMiddleware.js';
 
@@ -113,6 +113,8 @@ router.get('/:id', buscarChavePorId);
  *         description: Erro interno no servidor
  */
 router.post('/', authMiddleware, authorize('admin'), regrasValidacaoChave, criarChave);
+router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoChave, atualizarChavePut);
+router.patch('/:id', authMiddleware, authorize('admin'), regrasValidacaoChavePatch, atualizarChavePatch);
 
 /**
  * @swagger
@@ -169,8 +171,6 @@ router.post('/', authMiddleware, authorize('admin'), regrasValidacaoChave, criar
  *       500:
  *         description: Erro interno no servidor
  */
-router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoChave, atualizarChavePut);
-
 /**
  * @swagger
  * /chaves/{id}:
@@ -225,7 +225,6 @@ router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoChave, atu
  *       500:
  *         description: Erro interno no servidor
  */
-router.patch('/:id', authMiddleware, authorize('admin'), atualizarChavePatch);
 
 /**
  * @swagger

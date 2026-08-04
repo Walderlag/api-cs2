@@ -1,101 +1,66 @@
 import * as inventoryService from '../services/inventoryService.js';
 import { toChaveDTO } from '../dtos/chaveDTO.js';
+import { pickAllowedFields } from '../utils/pickAllowedFields.js';
+
+const CHAVE_CAMPOS_PERMITIDOS = ['nome', 'quantidade'];
 
 export const listarChaves = async (req, res, next) => {
   try {
-    const chaves = await inventoryService.getChaves();
-    res.status(200).json((chaves ?? []).map(toChaveDTO));
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 20;
+    const chaves = await inventoryService.getChaves({ page, limit });
+    res.status(200).json({ status: 200, data: (chaves ?? []).map(toChaveDTO) });
   } catch (error) { next(error); }
 };
 
 export const buscarChavePorId = async (req, res, next) => {
   try {
-    const { ObjectId } = await import('mongodb');
-    const { id } = req.params;
-    
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ mensagem: 'ID inválido.' });
+    const chave = await inventoryService.getChave(req.params.id);
+    if (!chave) {
+      return res.status(404).json({ status: 404, message: 'Chave não encontrada' });
     }
-    
-    const db = (await import('../data/db.js')).getDb();
-    const chave = await db.collection('chaves').findOne({ _id: new ObjectId(id) });
-    
-    if (!chave) return res.status(404).json({ mensagem: 'Chave não encontrada' });
-    res.status(200).json(toChaveDTO(chave));
+    res.status(200).json({ status: 200, data: toChaveDTO(chave) });
   } catch (error) { next(error); }
 };
 
 export const criarChave = async (req, res, next) => {
   try {
     const { nome, quantidade } = req.body;
-    
-    const db = (await import('../data/db.js')).getDb();
-    const result = await db.collection('chaves').insertOne({ nome, quantidade });
-    
-    res.status(201).json(toChaveDTO({ _id: result.insertedId, nome, quantidade }));
+    const chave = await inventoryService.addChave({ nome, quantidade });
+    res.status(201).json({ status: 201, data: toChaveDTO(chave) });
   } catch (error) { next(error); }
 };
 
 export const atualizarChavePut = async (req, res, next) => {
   try {
-    const { ObjectId } = await import('mongodb');
-    const { id } = req.params;
-    const { nome, quantidade } = req.body;
-
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ mensagem: 'ID inválido.' });
+    const chaveAtualizada = await inventoryService.updateChave(req.params.id, req.body);
+    if (!chaveAtualizada) {
+      return res.status(404).json({ status: 404, message: 'Chave não encontrada' });
     }
-
-    if (!nome || quantidade == null) {
-      return res.status(400).json({ mensagem: 'Nome e quantidade são obrigatórios.' });
-    }
-
-    const db = (await import('../data/db.js')).getDb();
-    const result = await db.collection('chaves').findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: { nome, quantidade } },
-      { returnDocument: 'after' }
-    );
-
-    if (!result) return res.status(404).json({ mensagem: 'Chave não encontrada' });
-    res.status(200).json(toChaveDTO(result));
+    res.status(200).json({ status: 200, data: toChaveDTO(chaveAtualizada) });
   } catch (error) { next(error); }
 };
 
 export const atualizarChavePatch = async (req, res, next) => {
   try {
-    const { ObjectId } = await import('mongodb');
-    const { id } = req.params;
-
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ mensagem: 'ID inválido.' });
+    const payload = pickAllowedFields(req.body, CHAVE_CAMPOS_PERMITIDOS);
+    if (Object.keys(payload).length === 0) {
+      return res.status(400).json({ status: 400, message: 'Nenhum campo válido para atualizar.' });
     }
-
-    const db = (await import('../data/db.js')).getDb();
-    const result = await db.collection('chaves').findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: req.body },
-      { returnDocument: 'after' }
-    );
-
-    if (!result) return res.status(404).json({ mensagem: 'Chave não encontrada' });
-    res.status(200).json(toChaveDTO(result));
+    const chaveAtualizada = await inventoryService.patchChave(req.params.id, payload);
+    if (!chaveAtualizada) {
+      return res.status(404).json({ status: 404, message: 'Chave não encontrada' });
+    }
+    res.status(200).json({ status: 200, data: toChaveDTO(chaveAtualizada) });
   } catch (error) { next(error); }
 };
 
 export const deletarChave = async (req, res, next) => {
   try {
-    const { ObjectId } = await import('mongodb');
-    const { id } = req.params;
-
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ mensagem: 'ID inválido.' });
+    const removido = await inventoryService.deleteChave(req.params.id);
+    if (!removido) {
+      return res.status(404).json({ status: 404, message: 'Chave não encontrada' });
     }
-
-    const db = (await import('../data/db.js')).getDb();
-    const result = await db.collection('chaves').deleteOne({ _id: new ObjectId(id) });
-
-    if (result.deletedCount === 0) return res.status(404).json({ mensagem: 'Chave não encontrada' });
     res.status(204).send();
   } catch (error) { next(error); }
 };

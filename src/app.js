@@ -1,4 +1,8 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
@@ -20,7 +24,23 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.set('trust proxy', 1);
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: 429,
+    message: 'Muitas requisições. Tente novamente mais tarde.'
+  }
+});
+
+app.use(globalLimiter);
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -37,22 +57,27 @@ app.use('/chaves', chaveRoutes);
 
 // Rota raiz (boas-vindas)
 app.get('/', (req, res) => {
-  res.json({ 
-    mensagem: "API CS2 Inventory está rodando com sucesso!",
-    documentacao: "/api-docs",
-    paginas: ["/perfil", "/caixas/view", "/skins/view"]
+  res.status(200).json({
+    status: 200,
+    data: {
+      mensagem: 'API CS2 Inventory está rodando com sucesso!',
+      documentacao: '/api-docs',
+      paginas: ['/perfil', '/caixas/view', '/skins/view']
+    }
   });
 });
 
 // 404 - Deve ficar por último
 app.use((req, res) => {
-  res.status(404).json({ mensagem: "A rota solicitada não existe." });
+  res.status(404).json({ status: 404, message: 'A rota solicitada não existe.' });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ mensagem: "Erro interno no servidor." });
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || 'Erro interno no servidor.';
+  res.status(status).json({ status, message });
 });
 
 export default app;

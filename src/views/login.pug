@@ -1,0 +1,62 @@
+doctype html
+html(lang="pt-br")
+  head
+    title CS2 Inventory — Login
+    meta(charset="UTF-8")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap")
+    style.
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Rajdhani',sans-serif;background:#0d0d14;color:#c0c4d8;min-height:100vh;display:flex;align-items:center;justify-content:center}
+      .login-box{background:#11131f;border:1px solid #1e2030;border-radius:8px;padding:36px;width:100%;max-width:380px;position:relative;overflow:hidden}
+      .login-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e8b84b,transparent)}
+      .logo{font-size:13px;color:#e8b84b;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:24px;text-align:center}
+      label{font-size:11px;color:#5a5f7a;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px}
+      input{width:100%;padding:10px 12px;background:#0d0d14;border:1px solid #1e2030;border-radius:6px;color:#f0f0f8;font-family:'Rajdhani',sans-serif;font-size:15px;margin-bottom:18px}
+      input:focus{outline:none;border-color:#e8b84b}
+      button{width:100%;padding:12px;background:#e8b84b;border:none;border-radius:6px;color:#0a0a0f;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+      button:hover{background:#c49a2d}
+      .erro{color:#ff5252;font-size:13px;margin-bottom:14px;display:none}
+      .link-registrar{text-align:center;margin-top:16px;font-size:13px}
+      .link-registrar a{color:#e8b84b;text-decoration:none}
+  body
+    div.login-box
+      div.logo CS2 Inventory
+      div#erro.erro
+      form#loginForm
+        label Email
+        input(type="email" id="email" required)
+        label Senha
+        input(type="password" id="senha" required)
+        button(type="submit") Entrar
+      div.link-registrar
+        span Não tem conta?
+        |  
+        a(href="/registrar") Registre-se
+    script.
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+        const erroDiv = document.getElementById('erro');
+        erroDiv.style.display = 'none';
+
+        try {
+          const res = await fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, senha })
+          });
+          const data = await res.json();
+
+          if (!res.ok) {
+            erroDiv.textContent = data.message || data.mensagem || 'Erro ao fazer login.';
+            erroDiv.style.display = 'block';
+            return;
+          }
+
+          window.location.href = '/perfil';
+        } catch (err) {
+          erroDiv.textContent = 'Erro de conexão com o servidor.';
+          erroDiv.style.display = 'block';
+        }
+      });

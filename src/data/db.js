@@ -5,4 +5,9 @@ export function getDb() {
   return client.db('cs2_inventory');
 }
 
-export default { getDb };
+export function startSession() {
+  const client = getClient();
+  return client.startSession();
+}
+
+export default { getDb, startSession };

@@ -5,7 +5,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-const BASE_URL = process.env.RENDER_EXTERNAL_URL || 'https://api-cs2.onrender.com';
+const EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET não está definido no arquivo .env');
+  process.exit(1);
+}
 
 async function startServer() {
   try {
@@ -13,12 +18,12 @@ async function startServer() {
     await connectDB();
     
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Servidor de Inventário CS2 rodando em https://api-cs2.onrender.com`);
-      console.log(`Documentação API: https://api-cs2.onrender.com/api-docs`);
-      console.log(`Página de Caixas em https://api-cs2.onrender.com/caixas/view`);
-      console.log(`Página de Skins em https://api-cs2.onrender.com/skins/view`);
-      console.log(`Perfil do Jogador em https://api-cs2.onrender.com/perfil`);
-      console.log(`Login em POST https://api-cs2.onrender.com/auth/login`);
+      console.log(`Servidor de Inventário CS2 rodando em ${EXTERNAL_URL}`);
+      console.log(`Documentação API: ${EXTERNAL_URL}/api-docs`);
+      console.log(`Página de Caixas em ${EXTERNAL_URL}/caixas/view`);
+      console.log(`Página de Skins em ${EXTERNAL_URL}/skins/view`);
+      console.log(`Perfil do Jogador em ${EXTERNAL_URL}/perfil`);
+      console.log(`Login em POST ${EXTERNAL_URL}/auth/login`);
     });
   } catch (error) {
     console.error('Erro ao iniciar o servidor:', error);

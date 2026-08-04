@@ -18,3 +18,21 @@ export const regrasValidacaoCaixa = [
 
   verificarErros
 ];
+
+export const regrasValidacaoCaixaPatch = [
+  body('nome')
+    .optional()
+    .trim()
+    .isLength({ min: 3 }).withMessage('O nome da caixa deve ter ao menos 3 caracteres'),
+
+  body('colecao')
+    .optional()
+    .trim()
+    .isLength({ min: 3 }).withMessage('A coleção deve ter ao menos 3 caracteres'),
+
+  body('chave_id')
+    .optional()
+    .isMongoId().withMessage('O ID da chave deve ser um ObjectId válido'),
+
+  verificarErros
+];

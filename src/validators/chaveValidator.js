@@ -12,3 +12,16 @@ export const regrasValidacaoChave = [
 
   verificarErros
 ];
+
+export const regrasValidacaoChavePatch = [
+  body('nome')
+    .optional()
+    .trim()
+    .isLength({ min: 3 }).withMessage('O nome da chave deve ter ao menos 3 caracteres'),
+
+  body('quantidade')
+    .optional()
+    .isInt({ min: 0 }).withMessage('A quantidade deve ser um número inteiro maior ou igual a 0'),
+
+  verificarErros
+];

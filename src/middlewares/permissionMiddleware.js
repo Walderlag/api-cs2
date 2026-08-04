@@ -2,7 +2,7 @@ export function authorize(...allowedRoles) {
   return (req, res, next) => {
     const userRole = req.user?.role;
     if (!allowedRoles.includes(userRole)) {
-      return res.status(403).json({ mensagem: 'Acesso negado. Permissões insuficientes.' });
+      return res.status(403).json({ status: 403, message: 'Acesso negado. Permissões insuficientes.' });
     }
     next();
   };

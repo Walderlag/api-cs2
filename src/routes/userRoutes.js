@@ -53,7 +53,7 @@ router.get('/', authMiddleware, authorize('admin'), async (req, res, next) => {
       criadoEm: u.criadoEm
     }));
 
-    res.status(200).json(usuariosDTO);
+    res.status(200).json({ status: 200, data: usuariosDTO });
   } catch (error) {
     next(error);
   }
@@ -113,14 +113,14 @@ router.post('/', authMiddleware, authorize('admin'), async (req, res, next) => {
     const { email, senha, role } = req.body;
 
     if (!email || !senha || !role) {
-      return res.status(400).json({ mensagem: 'Email, senha e role são obrigatórios.' });
+      return res.status(400).json({ status: 400, message: 'Email, senha e role são obrigatórios.' });
     }
 
     const db = getDb();
     const usuarioExistente = await db.collection('users').findOne({ email });
 
     if (usuarioExistente) {
-      return res.status(400).json({ mensagem: 'Email já existe.' });
+      return res.status(400).json({ status: 400, message: 'Email já existe.' });
     }
 
     const senhaHash = await bcrypt.hash(senha, 10);
@@ -134,11 +134,7 @@ router.post('/', authMiddleware, authorize('admin'), async (req, res, next) => {
       bloqueadoAte: null
     });
 
-    res.status(201).json({
-      id: result.insertedId.toString(),
-      email,
-      role
-    });
+    res.status(201).json({ status: 201, data: { id: result.insertedId.toString(), email, role } });
   } catch (error) {
     next(error);
   }

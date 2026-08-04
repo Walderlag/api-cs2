@@ -9,7 +9,7 @@ import {
   deletarSkin,
   renderizarSkins
 } from '../controllers/skinController.js';
-import { regrasValidacaoSkin } from '../validators/skinValidator.js';
+import { regrasValidacaoSkin, regrasValidacaoSkinPatch } from '../validators/skinValidator.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import { authorize } from '../middlewares/permissionMiddleware.js';
 
@@ -149,6 +149,8 @@ router.get('/:id', buscarSkinPorId);
  *         description: Erro interno no servidor
  */
 router.post('/', authMiddleware, authorize('admin'), regrasValidacaoSkin, criarSkin);
+router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoSkin, atualizarSkinPut);
+router.patch('/:id', authMiddleware, authorize('admin'), regrasValidacaoSkinPatch, atualizarSkinPatch);
 
 /**
  * @swagger
@@ -198,8 +200,6 @@ router.post('/', authMiddleware, authorize('admin'), regrasValidacaoSkin, criarS
  *       500:
  *         description: Erro interno no servidor
  */
-router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoSkin, atualizarSkinPut);
-
 /**
  * @swagger
  * /skins/{id}:
@@ -245,7 +245,6 @@ router.put('/:id', authMiddleware, authorize('admin'), regrasValidacaoSkin, atua
  *       500:
  *         description: Erro interno no servidor
  */
-router.patch('/:id', authMiddleware, authorize('admin'), atualizarSkinPatch);
 
 /**
  * @swagger
